@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -8,20 +8,34 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class AppComponent {
   title = 'Checkbox';
-  cForm!:FormGroup;
+  form: FormGroup;
+  countries: Array<any> = [
+    { name: 'India', value: 'india' },
+    { name: 'France', value: 'france' },
+    { name: 'USA', value: 'USA' },
+    { name: 'Germany', value: 'germany' },
+    { name: 'Japan', value: 'Japan' }
+  ];
 
-  constructor(private fb:FormBuilder) {
-   
+  constructor(fb: FormBuilder) {
+    this.form = fb.group({
+     selectedCountries:  new FormArray([])
+    });
+  }
+
+  onCheckboxChange(event: any) {
+    
+    const selectedCountries = (this.form.controls['selectedCountries'] as FormArray);
+    if (event.target.checked) {
+      selectedCountries.push(new FormControl(event.target.value));
+    } else {
+      const index = selectedCountries.controls
+      .findIndex(x => x.value === event.target.value);
+      selectedCountries.removeAt(index);
     }
-    ngOnInit(){
-      this.cForm = this.fb.group({
-        check: [''],
-        radio:['false'],
-        check1: [],
-        radio1:[]
-      })
-    }
-  onSubmit(form:any){
-    console.log(form);
+  }
+
+  submit() {
+    console.log(this.form.value);
   }
 }

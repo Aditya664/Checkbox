@@ -1,9 +1,12 @@
-<div>
-  <form [formGroup]="cForm" (ngSubmit)="onSubmit(cForm.value)">
-    <input type="checkbox" name="check" id="check" formControlName="check">
-    <input type="radio" formControlName="radio" id="" value="checkedValue">
-      <input type="checkbox" name="check" id="check" formControlName="check1">
-    <input type="radio" class="form-check-input" name="radio" formControlName="radio1" id="">
-      <button type="submit">submit</button>
+<section>
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <div *ngFor="let country of countries; let i=index">
+      <input type="checkbox" formArrayName="selectedCountries" [value]="country.value" (change)="onCheckboxChange($event)" 
+      />
+      {{ country.name}}
+    </div>
+    <button type="submit">Submit</button>
   </form>
-</div>
+
+  <p>{{ form.value | json }}</p>
+</section>
